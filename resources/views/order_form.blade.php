@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>注文フォーム</title>
+   
     @vite('resources/js/app.js')
 </head>
 <div>
@@ -32,19 +33,39 @@
     }
 
     //最短配送日表示メソッド
-    function getAfterNdays(n) {
-        var dt = new Date();
+    function deliveryDate(n) {
+        let dt = new Date();
         dt.setDate(dt.getDate() + n);
         return formatDate(dt);
     }
 
     //最短配送日表示
-    document.getElementById("datefield").value = getAfterNdays(1);
+    document.getElementById("datefield").value = deliveryDate(1);
     //最短配送日以前非表示
-    document.getElementById("datefield").min = getAfterNdays(1);
+    document.getElementById("datefield").min = deliveryDate(1);
 
     //配送希望日の選択肢
-    document.getElementById("datefield").max = getAfterNdays(1 + 5); 
+    document.getElementById("datefield").max = deliveryDate(1 + 5); 
+
+    baseDate = new Date();
+    //現在時刻
+    const hours = baseDate.getHours();
+    //締め切り時刻
+    const timeLimit = 15
+    //締め切り時間判定と土日判定
+    if(hours > timeLimit && !isHoliday(baseDate)) {
+      //最短日を+1日
+    document.getElementById("datefield").value = deliveryDate(1 + 1);
+    document.getElementById("datefield").min = deliveryDate(1 + 1);
+    }
+
+    //土日判定メソッド
+    const holiday = ['日', '土'];
+    function isHoliday(date) {
+      const week = date.getDay();
+      const weekStr = ['日', '月', '火', '水', '木', '金', '土'];
+      return holiday.includes(weekStr);
+    }
 </script>
 </body>
 
