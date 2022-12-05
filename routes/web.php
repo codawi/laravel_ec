@@ -18,4 +18,8 @@ use App\Http\Controllers\OrderFromController;
 //     return view('welcome');
 // });
 
-Route::get('/', [OrderFromController::class, 'index']);
+Route::get('/', [OrderFromController::class, 'deliveryForm']);
+
+Route::post('/option', [OrderFromController::class, 'option']);
+
+Route::post('/prefecture', [OrderFromController::class, 'ajax']);
