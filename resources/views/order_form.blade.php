@@ -9,17 +9,28 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     @vite('resources/js/app.js')
 </head>
-<div>
-    <form action="{{ url('/option') }}" method="POST">
-      @csrf
-        <button type="submit" name="option" value="1">設定1（最短配送翌日、選択肢5、15以降でも翌日配送、土日配送可、北海道+2日、沖縄+3日の設定値）</button>
-        <button type="submit" name="option" value="2">設定2（最短配送明後日、選択肢10、15時以降最短+1日、土日配送不可、北海道+3日、沖縄+3日の設定値）</button>
-    </form>
-</div>
 
 <div>
-    <label for="prefecture">お届け先:</label>
-    <select type="text" name="prefecture" id="prefecture" required>
+  <form action="{{ url('/option') }}" method="POST">
+    @csrf
+    <div class="flex items-center ml-4 my-8">
+      <button class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80" type="submit" name="option" value="1">管理者設定1</button> <p>（最短配送翌日、選択肢5、15以降でも翌日配送、土日配送可、北海道+2日、沖縄+3日の設定値）</p>
+    </div>
+    <div class="flex items-center ml-4 mt-8 mb-16 ">
+      <button class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80" type="submit" name="option" value="2">管理者設定2</button> <p>（最短配送翌々日、選択肢10、15時以降+1日、土日配送不可、北海道+3日、沖縄+3日の設定値）</p>
+    </div>
+    
+  </form>
+</div>
+
+<div class="bg-blue-300 flex items-center px-6 py-4 mx-auto overflow-x-auto whitespace-nowrap">
+  <span class="mx-5 text-lg font-bold text-gray-800 rtl:-scale-x-100">商品配送先・配送日時</span>
+</div>
+
+<div class="container px-16">
+<div class="my-16">
+    <label for="prefecture" class="block mb-2 text-sm font-bold text-gray-900">お届け先</label>
+    <select type="text" name="prefecture" id="prefecture"  required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
         <option value="" selected disabled>選択してください</option>
         @foreach (config('prefecture') as $key => $score)
             <option value="{{ $key }}">{{ $score }}</option>
@@ -27,13 +38,15 @@
     </select>
 </div>
 
-<div>
-    <label for="delivery_dates">配送希望日:</label>
-    <select type="text" name="delivery_dates" id="delivery_dates">
+<div class="my-16">
+    <label for="delivery_dates" class="block mb-2 text-sm font-bold text-gray-900">配送希望日:</label>
+    <select type="text" name="delivery_dates" id="delivery_dates" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
         @foreach ($delivery_dates as $key => $delivery_date)
             <option value="{{ $key }}">{{ $delivery_date }}</option>
         @endforeach
-    </select>
+    </select>  
+</div>
+<button class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">注文する</button>
 </div>
 
 <script>
