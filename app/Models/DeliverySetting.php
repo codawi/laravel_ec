@@ -12,9 +12,9 @@ class DeliverySetting extends Model
 {
     use HasFactory;
 
-    public function deliveryDate($n_day, $option_n)
+    public function deliveryDate($add_date, $set_value_id)
     {
-        $option = DeliverySetting::find($option_n);
+        $set_value = DeliverySetting::find($set_value_id);
         $now_date = Carbon::now();
         $end_date = Carbon::now();
 
@@ -22,17 +22,17 @@ class DeliverySetting extends Model
         $delivery_dates = [];
 
         //選択肢数
-        $options = $option->options;
+        $options = $set_value->options;
 
-        //最短&&最遅配送日
-        $start_date = $now_date->addWeekdays($option->shortest_delivery_dates + $n_day);
-        $end_date = $end_date->addWeekdays($option->shortest_delivery_dates + $n_day);
+        //最短&最遅配送日
+        $start_date = $now_date->addWeekdays($set_value->shortest_delivery + $add_date);
+        $end_date = $end_date->addWeekdays($set_value->shortest_delivery + $add_date);
 
         //当日締め切り時間判定
         $limit = Carbon::createFromTimeString('15:00:00');
         if ($start_date->gt($limit)) {
             //土日配送可
-            if ($option->delivery_not_possible === 0) {
+            if ($set_value->weekend_delivery === 0) {
                 $start_date->addDay();
                 $end_date_str = $end_date->addDays($options)->format('Y-m-d');
             } else {
@@ -44,7 +44,7 @@ class DeliverySetting extends Model
 
         //配送日一覧取得
         $start_date_str = $start_date->format('Y-m-d');
-        if ($option->delivery_not_possible === 0) {
+        if ($set_value->weekend_delivery === 0) {
             //土日含めて一覧取得
             $period = CarbonPeriod::create($start_date_str, $end_date_str)->toArray();
         } else {
