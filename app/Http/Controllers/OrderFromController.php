@@ -11,13 +11,16 @@ class OrderFromController extends Controller
 {
     public function DeliveryForm()
     {
-        $option = 1;
-        $day = 0;
+        //設定値
+        $set_value_id = 1;
+
+        //追加日数
+        $add_date = 0;
 
         $delivery_setting = new DeliverySetting();
-        $delivery_dates = $delivery_setting->deliveryDate($day, $option);
+        $delivery_dates = $delivery_setting->deliveryDate($add_date, $set_value_id);
 
-        $prefecture_option = DeliverySetting::find($option, ['prefecture']);
+        $prefecture_option = DeliverySetting::find($set_value_id, ['prefecture']);
 
         return view('order_form', compact('delivery_dates', 'option'));
     }
