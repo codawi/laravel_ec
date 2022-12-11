@@ -20,6 +20,6 @@ use App\Http\Controllers\OrderFromController;
 
 Route::get('/', [OrderFromController::class, 'deliveryForm']);
 
-Route::post('/option', [OrderFromController::class, 'option']);
+Route::post('/set_value', [OrderFromController::class, 'setValueChange']);
 
 Route::post('/prefecture', [OrderFromController::class, 'ajax']);

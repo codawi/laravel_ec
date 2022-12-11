@@ -3,46 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Models\DeliverySetting;
-use Carbon\Carbon;
+use App\Services\DeliveryDate;
 use Illuminate\Http\Request;
-use Carbon\CarbonPeriod;
 
 class OrderFromController extends Controller
 {
-    public function DeliveryForm()
+    public function DeliveryForm(DeliveryDate $delivery_date)
     {
-        //設定値
+        //初期設定値
         $set_value_id = 1;
 
-        //追加日数
-        $add_date = 0;
+        //都道府県追加日初期値
+        $prefecture_add_date = 0;
 
-        $delivery_setting = new DeliverySetting();
-        $delivery_dates = $delivery_setting->deliveryDate($add_date, $set_value_id);
+        $delivery_dates = $delivery_date->deliveryDates($set_value_id, $prefecture_add_date);
 
-        $prefecture_option = DeliverySetting::find($set_value_id, ['prefecture']);
-
-        return view('order_form', compact('delivery_dates', 'option'));
+        return view('order_form', compact('delivery_dates', 'set_value_id'));
     }
 
-    public function option(Request $request)
+    public function setValueChange(Request $request, DeliveryDate $delivery_date)
     {
-        $option = $request->option;
-        $delivery_setting = new DeliverySetting();
-        $delivery_dates = $delivery_setting->deliveryDate(0, $option);
+        $prefecture_add_date = 0;
+        
+        $set_value_id = (int)$request->set_value_id;
+        $delivery_dates = $delivery_date->deliveryDates($set_value_id, $prefecture_add_date);
 
-        return view('order_form', compact('delivery_dates', 'option'));
+        return view('order_form', compact('delivery_dates', 'set_value_id'));
     }
 
 
-    public function ajax(Request $request)
+    public function ajax(Request $request, DeliveryDate $delivery_date)
     {
-        $option = $request->opt;
-        $prefecture = intval($request->pre);
+        $set_value_id = (int)$request->value;
+        $prefecture_id = (int)$request->pre;
 
-        $delivery_setting = new DeliverySetting();
-
-        $delivery_dates = $delivery_setting->leadTime($option, $prefecture);
+        $delivery_dates = $delivery_date->leadTime($set_value_id, $prefecture_id);
 
         return $delivery_dates;
     }
